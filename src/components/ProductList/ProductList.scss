@@ -1,0 +1,53 @@
+// src/components/ProductList/ProductList.scss
+.product-list-container {
+  max-width: 1200px;
+  margin: 40px auto;
+  padding: 0 20px;
+}
+
+.product-list-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 30px;
+  
+  h2 {
+    font-size: 24px;
+    margin: 0;
+  }
+}
+
+.sort-controls {
+  display: flex;
+  gap: 20px;
+}
+
+.sort-control {
+  display: flex;
+  align-items: center;
+  
+  label {
+    margin-right: 10px;
+  }
+  
+  select {
+    padding: 5px 10px;
+    border: 1px solid #ddd;
+  }
+}
+
+.product-list {
+  display: flex;
+  flex-wrap: wrap;
+  margin: 0 -15px;
+}
+
+.loading, .error {
+  text-align: center;
+  padding: 40px;
+  font-size: 18px;
+}
+
+.error {
+  color: #e74c3c;
+}

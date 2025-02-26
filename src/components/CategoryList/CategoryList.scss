@@ -1,0 +1,38 @@
+// src/components/CategoryList/CategoryList.scss
+.category-list {
+  width: 250px;
+  padding: 20px;
+  background-color: #f8f9fa;
+  border-radius: 5px;
+  
+  h3 {
+    margin-top: 0;
+    margin-bottom: 15px;
+    font-size: 18px;
+  }
+  
+  ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    
+    li {
+      padding: 10px 0;
+      cursor: pointer;
+      border-bottom: 1px solid #e9ecef;
+      
+      &:last-child {
+        border-bottom: none;
+      }
+      
+      &:hover {
+        color: #e74c3c;
+      }
+      
+      &.active {
+        color: #e74c3c;
+        font-weight: bold;
+      }
+    }
+  }
+}

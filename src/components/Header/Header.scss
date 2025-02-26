@@ -1,0 +1,68 @@
+// src/components/Header/Header.scss
+@import '../../styles/variables';
+
+.header-container {
+  background-color: #0e9;
+  padding: 20px 0;
+  width: 100%;
+  background-color: #1abc9c;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+.logo {
+  &-box {
+    background-color: white;
+    padding: 15px 20px;
+    font-weight: bold;
+    font-size: 16px;
+  }
+}
+
+.search-cart {
+  display: flex;
+  align-items: center;
+}
+
+.search-form {
+  display: flex;
+  margin-right: 20px;
+  width: 450px;
+}
+
+.search-input {
+  padding: 10px 15px;
+  width: 100%;
+  border: none;
+  border-radius: 0;
+  &:focus {
+    outline: none;
+  }
+}
+
+.search-button {
+  background-color: #e74c3c;
+  border: none;
+  color: white;
+  padding: 10px 15px;
+  cursor: pointer;
+}
+
+.cart-link {
+  color: white;
+  text-decoration: none;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  
+  .cart-count {
+    margin-left: 5px;
+  }
+}

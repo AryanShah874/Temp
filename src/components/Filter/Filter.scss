@@ -1,0 +1,66 @@
+// src/components/Filter/Filter.scss
+.filter-container {
+  background-color: #f8f9fa;
+  padding: 20px;
+  border-radius: 5px;
+  margin-bottom: 20px;
+  
+  h3 {
+    margin-top: 0;
+    margin-bottom: 15px;
+    font-size: 18px;
+    color: #333;
+  }
+  
+  .filter-group {
+    margin-bottom: 15px;
+    
+    &:last-child {
+      margin-bottom: 0;
+    }
+    
+    label {
+      display: block;
+      margin-bottom: 8px;
+      font-weight: 500;
+      color: #555;
+    }
+    
+    .price-range {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+      
+      input {
+        flex: 1;
+        padding: 8px;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        
+        &:focus {
+          outline: none;
+          border-color: #1abc9c;
+        }
+      }
+      
+      span {
+        color: #666;
+      }
+    }
+    
+    .filter-button {
+      background-color: #1abc9c;
+      color: white;
+      border: none;
+      padding: 8px 15px;
+      width: 100%;
+      margin-top: 10px;
+      cursor: pointer;
+      border-radius: 4px;
+      
+      &:hover {
+        background-color: darken(#1abc9c, 10%);
+      }
+    }
+  }
+}

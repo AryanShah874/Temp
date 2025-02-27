@@ -1,6 +1,11 @@
 // src/redux/slices/productSlice.ts
 import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
 import { Product, SortOption, SortDirection } from '../../types';
+import { 
+  fetchAllProducts, 
+  fetchProductsByCategoryApi, 
+  fetchCategories as fetchCategoriesApi 
+} from '../../services/api';
 
 interface ProductState {
   products: Product[];
@@ -11,6 +16,10 @@ interface ProductState {
   currentCategory: string | null;
   sortBy: SortOption;
   sortDirection: SortDirection;
+  priceRange: {
+    min: number;
+    max: number;
+  };
 }
 
 const initialState: ProductState = {
@@ -21,24 +30,25 @@ const initialState: ProductState = {
   error: null,
   currentCategory: null,
   sortBy: 'name',
-  sortDirection: 'asc'
+  sortDirection: 'asc',
+  priceRange: {
+    min: 0,
+    max: Infinity
+  }
 };
 
 export const fetchProducts = createAsyncThunk('products/fetchProducts', async () => {
-  const response = await fetch('https://fakestoreapi.com/products');
-  return await response.json();
+  return await fetchAllProducts();
 });
 
 export const fetchCategories = createAsyncThunk('products/fetchCategories', async () => {
-  const response = await fetch('https://fakestoreapi.com/products/categories');
-  return await response.json();
+  return await fetchCategoriesApi();
 });
 
 export const fetchProductsByCategory = createAsyncThunk(
   'products/fetchProductsByCategory',
   async (category: string) => {
-    const response = await fetch(`https://fakestoreapi.com/products/category/${category}`);
-    return await response.json();
+    return await fetchProductsByCategoryApi(category);
   }
 );
 
@@ -55,21 +65,57 @@ const productSlice = createSlice({
           product => product.category === action.payload
         );
       }
+      
+      // Apply price filter
+      state.filteredProducts = state.filteredProducts.filter(
+        product => product.price >= state.priceRange.min && product.price <= state.priceRange.max
+      );
+      
+      // Apply sorting
+      state.filteredProducts = sortProductsHelper(
+        state.filteredProducts, 
+        state.sortBy, 
+        state.sortDirection
+      );
     },
     sortProducts: (state, action: PayloadAction<{ sortBy: SortOption; direction: SortDirection }>) => {
       const { sortBy, direction } = action.payload;
       state.sortBy = sortBy;
       state.sortDirection = direction;
       
-      state.filteredProducts = [...state.filteredProducts].sort((a, b) => {
-        if (sortBy === 'name') {
-          return direction === 'asc' 
-            ? a.title.localeCompare(b.title)
-            : b.title.localeCompare(a.title);
-        } else {
-          return direction === 'asc' ? a.price - b.price : b.price - a.price;
-        }
-      });
+      state.filteredProducts = sortProductsHelper(
+        state.filteredProducts,
+        sortBy,
+        direction
+      );
+    },
+    filterByPrice: (state, action: PayloadAction<{ min: number; max: number }>) => {
+      const { min, max } = action.payload;
+      state.priceRange = { min, max };
+      
+      // Apply category filter first
+      let filtered = state.currentCategory === null
+        ? [...state.products]
+        : state.products.filter(product => product.category === state.currentCategory);
+      
+      // Then apply price filter
+      filtered = filtered.filter(
+        product => product.price >= min && product.price <= max
+      );
+      
+      // Then apply sorting
+      state.filteredProducts = sortProductsHelper(
+        filtered,
+        state.sortBy,
+        state.sortDirection
+      );
+    },
+    resetFilters: (state) => {
+      state.currentCategory = null;
+      state.priceRange = { min: 0, max: Infinity };
+      state.sortBy = 'name';
+      state.sortDirection = 'asc';
+      state.filteredProducts = [...state.products];
     }
   },
   extraReducers: (builder) => {
@@ -96,9 +142,41 @@ const productSlice = createSlice({
         state.status = 'succeeded';
         state.filteredProducts = action.payload;
         state.currentCategory = action.meta.arg;
+        
+        // Re-apply price filters when category changes
+        if (state.priceRange.min > 0 || state.priceRange.max < Infinity) {
+          state.filteredProducts = state.filteredProducts.filter(
+            product => product.price >= state.priceRange.min && 
+                       product.price <= state.priceRange.max
+          );
+        }
+        
+        // Re-apply sorting
+        state.filteredProducts = sortProductsHelper(
+          state.filteredProducts,
+          state.sortBy,
+          state.sortDirection
+        );
       });
   }
 });
 
-export const { filterByCategory, sortProducts } = productSlice.actions;
+// Helper function for sorting products
+const sortProductsHelper = (
+  products: Product[], 
+  sortBy: SortOption, 
+  direction: SortDirection
+): Product[] => {
+  return [...products].sort((a, b) => {
+    if (sortBy === 'name') {
+      return direction === 'asc' 
+        ? a.title.localeCompare(b.title)
+        : b.title.localeCompare(a.title);
+    } else {
+      return direction === 'asc' ? a.price - b.price : b.price - a.price;
+    }
+  });
+};
+
+export const { filterByCategory, sortProducts, filterByPrice, resetFilters } = productSlice.actions;
 export default productSlice.reducer;

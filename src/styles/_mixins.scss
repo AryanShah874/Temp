@@ -1,0 +1,94 @@
+// src/styles/_mixins.scss
+
+// Flexbox mixins
+@mixin flex-center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+@mixin flex-between {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+@mixin flex-column {
+  display: flex;
+  flex-direction: column;
+}
+
+// Media query mixins
+@mixin mobile {
+  @media (max-width: $breakpoint-md) {
+    @content;
+  }
+}
+
+@mixin tablet {
+  @media (min-width: $breakpoint-md) and (max-width: $breakpoint-lg) {
+    @content;
+  }
+}
+
+@mixin desktop {
+  @media (min-width: $breakpoint-lg) {
+    @content;
+  }
+}
+
+// Button mixins
+@mixin button-primary {
+  background-color: $primary-color;
+  color: white;
+  border: none;
+  padding: $spacing-sm $spacing-lg;
+  cursor: pointer;
+  font-weight: 500;
+  
+  &:hover {
+    background-color: darken($primary-color, 10%);
+  }
+}
+
+@mixin button-secondary {
+  background-color: $secondary-color;
+  color: white;
+  border: none;
+  padding: $spacing-sm $spacing-lg;
+  cursor: pointer;
+  font-weight: 500;
+  
+  &:hover {
+    background-color: darken($secondary-color, 10%);
+  }
+}
+
+// Card mixins
+@mixin card {
+  background-color: $background-color;
+  border-radius: 5px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  padding: $spacing-lg;
+}
+
+// Typography mixins
+@mixin heading-1 {
+  font-size: $font-size-xxl;
+  font-weight: 700;
+  color: $text-color;
+  margin-bottom: $spacing-lg;
+}
+
+@mixin heading-2 {
+  font-size: $font-size-xl;
+  font-weight: 600;
+  color: $text-color;
+  margin-bottom: $spacing-md;
+}
+
+@mixin body-text {
+  font-size: $font-size-md;
+  line-height: 1.6;
+  color: $light-text-color;
+}

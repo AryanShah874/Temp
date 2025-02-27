@@ -33,7 +33,7 @@ const Header: React.FC = () => {
               className="search-input"
             />
             <button type="submit" className="search-button">
-              <i className="fas fa-search"></i>
+              <i className="fas fa-search">🔍</i>
             </button>
           </form>
           <Link to="/cart" className="cart-link">
